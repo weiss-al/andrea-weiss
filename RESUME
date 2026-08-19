@@ -1,1 +1,135 @@
+<!--
+---
+template: portfolio-resume
+purpose: "Resume skeleton (Penn-style) for student GitHub portfolios — Markdown source that exports cleanly to PDF via browser print"
+audience: student
+fields_required: [name, contact, education, professional_experience, leadership, honors, skills]
+naming_convention: "RESUME.md (lives at the root of the student's portfolio repo)"
+courses: [BUS-629, BUS-122B]
+---
+-->
 
+Andrea Weiss
+**Email:** AndreaLynnWeiss@gmail.com · (808)673-6274
+Kaneohe, HI
+
+
+---
+
+## EDUCATION
+**Georgetown University** — Washington, DC  
+- *M.A. in Security Studies*, 2020
+- School of Foreign Service
+- Cumulative GPA: 3.8/4.0 
+
+**Columbia University** — New York, NY  
+- *B.S. in Mechanical Engineering*, 2013   
+- School of Engineering and Applied Sciences
+- Cumulative GPA: 3.6/4.0 
+
+**Willamette University** — Salem, OR
+- *B.A. in Physics*, 2013   
+- Cumulative GPA: 3.8/4.0 
+
+---
+
+## PROFESSIONAL EXPERIENCE
+**Chief Operating Officer** - Nov2026-Present 
+*Girl Scouts of Hawaii* — Honolulu, HI 
+- Assumed a gapped Director role during transition with prior COO: Overhauled a struggling cookie
+program, representing 50%+ of annual revenue, by resolving critical gaps in staffing, planning, state-
+wide coordination, and institutional knowledge.
+- Built and sustained relationships with private industry and community organizations to expand
+opportunities and resources for Girl Scouts statewide.
+- Implemented a maintenance tracking program to improve conditions and monitor status of multi-
+million dollar camp properties across Oʻahu, Maui and Hawaiʻi.
+- Dismantled interdepartmental silos and opened communication channels across staff and volunteers,
+driving alignment across the organization and increasing staff retention.
+
+**Chief Executive Officer, Acting** - Dec2024-Aug2025
+*Hawaiian Building Maintenance* — Honolulu, HI 
+Strategic and operational leadership of a $35M revenue janitorial and maintenance company.
+- 600 FTE across 300 sites spanning Oʻahu, Maui, Hawaiʻi, and Kauaʻi.
+- Increased gross margin 20% YOY by revitalizing operational processes to increase efficiency.
+- Developed and maintained relationships with community and private industry leaders.
+- Recruited eight key leadership roles following major personnel transitions.
+- Established a new organizational chart to clearly define responsibility and accountability.
+- Updated standard contractual language and established a Terms of Service for customer agreements.
+- Overhauled employee benefits and hiring process to reduce turnover by 30%.
+- Developed marketing strategy including website re-design and email campaigns engage customers.
+- Established root-cause analysis mechanism to enhance organizational continuous improvement.
+
+**Chief Operating Officer** - Sep2024-Dec2024
+*Hawaiian Building Maintenance* — Honolulu, HI 
+- Led training and professional development for employees at supervisory and front-line positions.
+- Evaluated and developed plans for technology implementations to streamline operations processes.
+- Organized and facilitated recurring meetings with customers to ensure quality of service.
+- Managed site staffs across multiple islands at large commercial, residential, and retail facilities.
+
+**U.S. Navy - Submarine Warfare Officer**
+*Deputy Director, Fires*
+Submarine Forces Pacific (COMSUBPAC) Apr 2023–Sep 2024 - Pearl Harbor, HI
+- Coordinated multi-national exercises with international partners and defense contractors.
+- Fostered collaboration amongst regional stakeholders in the Pacific Islands for military exercises.
+- Participated in strategic discussions about submarine force utilization in the Pacific Fleet - reconciled
+disparate orders from headquarters to deliver concise written guidance to operational submarines.
+
+*Operations Officer | Navigator | Weapons Officer*
+USS HAWAII (SSN-776) Jul 2022–Apr 2023 - Pearl Harbor, HI
+- Director, supervisor, and personnel manager for multiple departments encompassing over 60
+individuals across disparate working groups and experience levels.
+- Responsible for personnel training, qualification, evaluation, and professional development.
+- Coordinated and oversaw complex maintenance and testing of submarine electrical, mechanical,
+nuclear reactor, hydraulic, navigation, and communications systems in a shipyard environment.
+- First—and only—woman assigned to USS HAWAII, laying the foundation for future integration.
+
+*Weapons Officer | Combat Systems Officer*
+USS NORTH CAROLINA (SSN-777) Jul 2021–Jul 2022 - Pearl Harbor, HI
+- Principal ship-driver and team leader during extended military operations requiring high-consequence
+risk analysis and rapid decision-making in emergent situations.
+- First senior-level female leader assigned to the submarine. In an isolated, 97% male environment,
+mentored and advocated for the four women Junior Officers on issues such as interpersonal
+coordination and assertion with seniors and subordinates, maintaining a voice in strategic planning, and
+establishing equity in professional development opportunities.
+
+*Senior Officer, President’s Emergency Operations Center (PEOC)*
+The White House Apr 2018–Dec 2020 - Washington, DC
+- Implemented highly sensitive Presidential and Vice-Presidential Emergency Plans through activation
+and direction of crucial national strategic assets to support the President and Vice-President under time-
+critical conditions during national military emergencies and international incidents.
+- Developed and executed Continuity of Operations (COOP) plans and policies across the Capitol region.
+- Primary briefer for Congresspeople and senior White House and senior DOD/military officials.
+- Wrote first-ever policy doctrine that transformed PEOC operations, communications, and reporting
+practices.
+
+*Assistant Weapons Officer | Reactor Control Officer | Special Operations Forces Officer*
+USS OHIO (SSGN-726) Jul 2015–Apr 2018 - Bangor, WA & Apra Harbor, Guam
+- Ensured 100% accuracy of extensive maintenance and repairs to a 40-year-old nuclear reactor through
+two Western Pacific deployments.
+- Coordinated submarine maintenance availabilities while living in Apra Harbor, Guam.
+---
+
+## LEADERSHIP EXPERIENCE
+**Ronald McDonald House Charity, Hawaii**, *Board Member* — Honolulu, HI — May2025-Present
+- Supporting families with children seeking medical care through the reliable operation of two Oʻahu
+homes and NICU hospitality carts, with the goal to build the organization through stronger community
+relationships, enriching activities for families, and sustainable financial practices to grow the number of
+families we serve.
+
+---
+
+## HONORS AND AWARDS
+- Captain Winifred Quick Collins Award for Inspirational Leadership - awarded by the Navy
+League to one woman Naval Officer annually for exceptional and inspirational leadership.
+- Personal military awards include the Defense Meritorious Service Medal, Navy Commendation Medal,
+and Navy Achievement Medal (two awards).
+
+---
+## PUBLICATIONS
+
+**Performance & Optimization of M/G/c/c Building Evacuation Networks**
+*Journal of Mathematical Modeling and Algorithms – Dec 2012*, Vol 11, Issue 4
+A. Weiss, L. Williams, J. MacGregor Smith
+
+## SKILLS AND INTERESTS
+Classical Harp, Baking and Cake Decorating 
