@@ -24,7 +24,10 @@ AndreaLynnWeiss@gmail.com · (808)673-6274 · Kaneohe, HI
 ---
 
 ## PROFESSIONAL EXPERIENCE
-**Chief Operating Officer** - Nov2026-Present 
+**Chief Operating Officer** - Sep2026-Present 
+*Girl Scouts of Hawaii* — Honolulu, HI 
+
+**Chief Operating Officer** - Nov2025-Sep2026 
 *Girl Scouts of Hawaii* — Honolulu, HI 
 - Assumed a gapped Director role during transition with prior COO: Overhauled a struggling cookie
 program, representing 50%+ of annual revenue, by resolving critical gaps in staffing, planning, state-
