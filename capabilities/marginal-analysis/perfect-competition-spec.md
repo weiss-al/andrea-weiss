@@ -75,24 +75,30 @@ All values from the case scenario table. Nothing here is inferred.
 | `TOTAL_BEDS` | 64 | beds (16 beds x 4 plots) | Case scenario, header line |
 | `FARMER_SALARY` | 50000 | USD per season | Case scenario, header line |
 | `FARMER_FIELD_HRS` | 720 | hours per season | Case scenario, header line |
-| `FARMER_RATE` | 34.72 | USD per hour | Case scenario, header line (implied) |
 | `TEMP_MAX` | 4 | workers | Case scenario, header line |
 | `TEMP_COST` | 25000 | USD per worker per season | Case scenario, header line |
 | `TEMP_HRS` | 1440 | hours per worker per season | Case scenario, header line |
-| `TEMP_RATE` | 17.36 | USD per hour | Case scenario, header line (implied) |
+
+`FARMER_RATE` and `TEMP_RATE` are not entered here. They are computed rates — see
+Calculation logic — and are never typed in as the rounded $34.72 / $17.36 the case
+displays. See Conventions, "Rates are ratios, not decimals."
 
 ### Per crop
 | Name | Tomatoes | Carrots | Mesclun | Unit | Source |
 |---|---|---|---|---|---|
 | `MAXBED_c` | 20 | 20 | 30 | beds | Case scenario, crop table |
 | `PRICE_c` | 8800 | 2094 | 2700 | USD per bed | Case scenario, crop table |
-| `HRS_WK_BED_c` | 2.50 | 0.833 | 1.25 | hours per week per bed | Case scenario, crop table |
+| `HRS_WK_BED_c` | 5/2 | 5/6 | 5/4 | hours per week per bed | Case scenario, crop table |
 | `FERT_c` | 880 | 440 | 880 | USD per bed | Case scenario, crop table |
 | `DIM_c` | 10.00% | 2.50% | 1.25% | per additional bed | Case scenario, crop table |
 
 `PRICE_c` is revenue per bed — the case has already collapsed price per unit and yield
 per bed into one figure, so yield is not separately modeled and per-bed revenue does
 not decline with scale. Every nonlinearity in this model lives in labor.
+
+`HRS_WK_BED_CAR` is entered as `5/6`, the ratio the case's displayed `0.833` rounds.
+See Conventions, "Rates are ratios, not decimals" — the same rule applies to every
+derived or truncated-looking figure in this contract, not only this one.
 
 ## Structure
 | Sheet | Purpose |
@@ -106,16 +112,24 @@ not decline with scale. Every nonlinearity in this model lives in labor.
 ## Calculation logic
 In named-range notation. `c` ranges over the three crops; `q` is a bed index.
 
+Computed rates — formulas, never re-typed as their rounded decimals:
+
+    FARMER_RATE = FARMER_SALARY / FARMER_FIELD_HRS   ( = 50000/1440, not 34.72 )
+    TEMP_RATE   = TEMP_COST / TEMP_HRS               ( = 25000/1440, not 17.36 )
+
 Season hours for a single bed of crop c, before diminishing returns:
 
     SEASON_HRS_PER_BED_c = HRS_WK_BED_c x WEEKS
 
-Diminishing returns compound per bed: the q-th bed of a crop needs `DIM_c` more hours
-than the (q-1)-th.
+Diminishing returns compound on the whole crop, not incrementally per added bed: every
+one of the q beds planted of crop c is charged the same `(1 + DIM_c)^q` multiplier, so
+planting one more bed of a crop already at scale raises the labor bill on beds already
+in the ground, not just on the new one.
 
-    MARGINAL_LABOR_HRS_c(q) = SEASON_HRS_PER_BED_c x (1 + DIM_c)^(q-1)
+    LABOR_HRS_c(q) = SEASON_HRS_PER_BED_c x q x (1 + DIM_c)^q
 
-    LABOR_HRS_c(q) = SEASON_HRS_PER_BED_c x ((1 + DIM_c)^q - 1) / DIM_c
+    MARGINAL_LABOR_HRS_c(q) = LABOR_HRS_c(q) - LABOR_HRS_c(q-1)
+                             = SEASON_HRS_PER_BED_c x (1 + DIM_c)^(q-1) x (1 + q x DIM_c)
 
 Marginal cost of the q-th bed, and its contribution:
 
@@ -134,31 +148,43 @@ Labor supply and cash cost:
 **Labor costing — the one that decides the answer.** The farmer's salary is paid in
 full whatever is planted, so her 720 field hours are sunk within the season and carry
 no marginal cost. Temporary workers are the marginal source of labor, so
-`MARGINAL_WAGE = TEMP_RATE` ($17.36/hr) for the `MC_c(q)` calculation above. The
-farmer's implied `FARMER_RATE` is reported for reference and is never charged against
+`MARGINAL_WAGE = TEMP_RATE` (computed as `TEMP_COST / TEMP_HRS`, ≈ $17.36/hr — see
+"Rates are ratios, not decimals" below) for the `MC_c(q)` calculation above. The
+farmer's computed `FARMER_RATE` is reported for reference and is never charged against
 a bed; doing so would double-count a fixed salary.
 
 **Temps are lumpy, and this is not a rounding detail.** A temp is $25,000 for 1,440
 hours, hired whole. Labor cash cost is therefore a step function, and within a step the
 cash cost of one more hour is zero while the cash cost of the hour that forces a new
-hire is $25,000. Pricing marginal labor at a smooth $17.36/hr is a modeling convenience
-that is correct for ranking beds and wrong for the hiring decision. The model must
-therefore solve over `N_TEMP` explicitly — evaluate the optimal bed mix at each
-`N_TEMP` in 0..4 and take the best profit — rather than optimizing beds at a fixed
-wage and reading off the temp count afterwards. A scoping check while writing this spec
-confirmed the sweep is not busywork: the profit-maximizing `N_TEMP` is not the maximum
-`N_TEMP`, and hiring the fourth temp destroys roughly $900 of profit while changing the
-bed mix. A model that assumes four temps and optimizes beds against a smooth $17.36/hr
-gets both the hiring call and the mix wrong.
+hire is $25,000. Pricing marginal labor at the smooth `TEMP_RATE` is a modeling
+convenience that is correct for ranking beds and wrong for the hiring decision. The
+model must therefore solve over `N_TEMP` explicitly — evaluate the optimal bed mix at
+each `N_TEMP` in 0..4 and take the best profit — rather than optimizing beds at a fixed
+wage and reading off the temp count afterwards. A scoping check while writing this spec,
+run against the labor formula below, confirmed the sweep is not busywork: profit peaks
+at `N_TEMP = 3` (beds 10/19/28, profit ≈ $16,586), and hiring a fourth temp *reduces*
+profit to ≈ $12,720 — a swing of roughly $3,866 — while also changing the bed mix. A
+model that assumes four temps and optimizes beds against a flat wage gets both the
+hiring call and the mix wrong.
 
-**Diminishing returns compound on the bed, not the crop.** `DIM_c` is read as "each
-additional bed of this crop requires `DIM_c` more labor hours than the previous bed,"
-giving the geometric term above. The alternative linear reading is rejected: under the
-geometric reading tomatoes stop at 18 beds on an unconstrained `MC = PRICE` test, which
-is exactly where the engagement brief's hypothesis put them; and total labor demand with
-tomatoes at 18 and carrots and mesclun at their caps comes to 6,496 hours against a
-maximum supply of 6,480 — an overshoot of 16 hours on a 6,500-hour budget. Both are
-strong signals the case was built on the compounding reading.
+**Diminishing returns compound on the whole crop, not incrementally per bed.** This
+reverses what an earlier draft of this spec specified, on direct evidence, and the
+correction matters enough to record why. That draft read `DIM_c` as "each additional
+bed needs `DIM_c` more hours than the previous bed" and used it to justify the reading
+on the grounds that tomatoes then stopped at 18 beds — matching the engagement brief's
+hypothesis — with total labor demand landing 16 hours over supply. Checked directly
+against the case's own labor formula, `LABOR_HRS_c(q) = SEASON_HRS_PER_BED_c x q x
+(1 + DIM_c)^q`, neither fact holds: under that formula tomatoes stop at 10 beds on an
+unconstrained `MC = PRICE` test, not 18, and a mix of 18/20/30 needs about 11,950 labor
+hours, nearly double the supply, not 16 hours over it. The per-bed reading's supporting
+arithmetic belonged to the per-bed formula alone; it was not independent evidence, and
+should not have been read as corroboration. The case's formula is adopted instead on a
+harder test: at `q = 10` tomato beds it gives 2,334.37 hours, matching the published
+check figure exactly, where the per-bed series gives 1,434.37 — a difference too large
+to be rounding, and the check figure is the authority here, not the more natural-sounding
+English reading. **Recommendation: build the model on `LABOR_HRS_c(q) = SEASON_HRS_PER_BED_c
+x q x (1 + DIM_c)^q`**, per Calculation logic above, and treat this paragraph, not the
+one it replaces, as the citable rationale.
 
 **Costing order.** Fertilizer is a pure per-bed variable cost, charged in full to every
 bed planted. `FIXED_COSTS` and `FARMER_SALARY` are period costs, subtracted once at the
@@ -166,9 +192,15 @@ bottom of the P&L and never allocated to a crop or a bed. No crop is charged a s
 overhead, so per-crop figures are contributions, not profits, and must be labeled as
 such.
 
-**Values as printed.** Table figures are used exactly as given, including
-`HRS_WK_BED_CAR = 0.833` rather than 5/6. No intermediate rounding: rounding happens at
-presentation only, to whole dollars and one decimal place on hours.
+**Rates are ratios, not decimals.** Every figure the case displays as a rounded decimal
+is entered as the ratio it comes from, computed by formula: `HRS_WK_BED_CAR = 5/6`
+(never `0.833`), `FARMER_RATE = FARMER_SALARY / FARMER_FIELD_HRS` (never `34.72`),
+`TEMP_RATE = TEMP_COST / TEMP_HRS` (never `17.36`). A rounded literal entered instead of
+the ratio is a bug, not a simplification — a sibling workbook in this cohort stored the
+rounded rates directly and came out $13.16 high on a $42,762 profit; its own check row
+caught the drift, and the fix was exactly this rule. No intermediate rounding anywhere
+in the workbook: rounding happens at presentation only, to whole dollars and one decimal
+place on hours.
 
 **Boundaries.** Bed counts are whole beds; partial beds do not exist. Beds may be left
 fallow. `N_TEMP` is whole workers, capped at 4. A crop may be planted in zero beds.
@@ -186,8 +218,9 @@ The finished model must satisfy all of these, each as a visible pass/fail row on
    A crop that fails this and is not at a binding constraint is mis-solved.
 5. **Constraint attribution.** Every crop stopped below its cap is traceable to a named
    binding constraint. No crop stops for an unexplained reason.
-6. **Hand calculation.** One crop's `MARGINAL_LABOR_HRS_c(q)` and `MC_c(q)` at three bed
-   counts, computed by hand off the spec, match the model to the dollar.
+6. **Hand calculation.** Tomatoes at `q = 10`: `LABOR_HRS_TOM(10) = 2,334.37` hours,
+   `MARGINAL_LABOR_HRS_TOM(10) = 424.43` hours, `MC_TOM(10) ≈ 8,248.59`. Computed by hand
+   off the spec, this and two other bed counts must match the model to the dollar.
 7. **Cash reconciliation.** `PROFIT` on `Optimize` equals `PROFIT` on the `P&L` sheet
    built from actual cash outlays (`FIXED_COSTS` + `FARMER_SALARY` + `N_TEMP` x
    `TEMP_COST` + fertilizer). This is the check that catches the smooth-wage error
@@ -212,8 +245,11 @@ The finished model must satisfy all of these, each as a visible pass/fail row on
 | `BED_SHADOW_PRICE` | Contribution gained from one more bed, when beds bind |
 
 ## Open decisions
-None blocking. Both prior open questions are resolved above: `MARGINAL_WAGE` is the temp
-rate with the farmer's hours sunk, and `DIM_c` compounds per bed.
+None blocking. `MARGINAL_WAGE` is `TEMP_RATE`, computed as a ratio, with the farmer's
+hours sunk; `DIM_c` compounds on the whole crop via `LABOR_HRS_c(q) = SEASON_HRS_PER_BED_c
+x q x (1 + DIM_c)^q`; and every rate the case displays rounded is entered as its exact
+ratio. All three were revised from an earlier draft after being checked against the
+case's own numbers — see Conventions.
 
 ## Audit findings
 Added AFTER the build. For each check: what you checked, what you found, what you did
