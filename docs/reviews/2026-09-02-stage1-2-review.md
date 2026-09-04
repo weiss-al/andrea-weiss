@@ -1,53 +1,52 @@
-<!-- PR TARGET: https://github.com/weiss-al/andrea-weiss | Stage 1.2 (8 pts) -->
+<!-- PR TARGET: https://github.com/weiss-al/andrea-weiss | Stage 1.2 -->
 # Stage 1.2 review — spec, build, audit
-
-**Spec-side 48 out of 62.5 — held, not entered. The workbook is not due until 6 September and there is no workbook yet, so a total computed against one would misdescribe the work.**
 
 **Spec:** [`capabilities/marginal-analysis/perfect-competition-spec.md`](https://github.com/weiss-al/andrea-weiss/blob/main/capabilities/marginal-analysis/perfect-competition-spec.md)
 
-> Graded 2026-09-02, first pass on this specification. I owe you a correction first: my 31 August report recorded your spec as a 1,643-byte file. The document at capabilities/marginal-analysis/perfect-competition-spec.md is 11,078 bytes and it is a serious piece of work — the most conceptually ambitious specification in the cohort. I measured the wrong file and the note about you in that report was wrong. It is corrected in the current one.
+> Re-graded 2026-09-04 against your build of this morning. You have been reviewed on this before. You built it, you adopted the case's labor function, you dropped the rounded inputs, and you wrote two audit findings that are genuine intellectual work. This is the biggest single move anyone has made on this stage.
 
-| Criterion | Earned | Notes |
-|---|---|---|
-| Spec completeness — inputs, structure, calculation flow | 30 / 37.5 | Complete, buildable, and unusually well argued. The named contract is there with sources, the five sheets are specified with a purpose each, the objective function and constraints are written algebraically, and the Conventions section does the thing that separates a specification from a description — it writes down the decisions a builder would otherwise invent. Seven and a half points off for two divergences from the case, both discussed below: your labor function is a geometric series rather than the case's compounding form, and your Values as printed rule deliberately uses the rounded 0.833, $34.72 and $17.36 rather than the exact ratios behind them. |
-| Spec validation rules | 18 / 25 | Ten rules, several of them stronger than anything else in the cohort. The price-taker test — for any crop below its cap with slack in beds and labor, MC at the last bed must sit below price and above it at the next — is a real acceptance test derived from the economics rather than copied from the check figures. The constraint-attribution rule (every crop stopped below its cap traces to a named binding constraint, no crop stops for an unexplained reason) is the best single validation rule anyone wrote. Seven points off because none of the published check figures appear as acceptance tests, there are no tolerances anywhere — rule 6 says 'match to the dollar' — and the Farm Profit Lab cross-check on the stage checklist is not in the document. |
-| Workbook satisfies the contract | 0 / 25 | capabilities/marginal-analysis/model.xlsx is a 1-byte placeholder and has been since 22 August. Nothing is lost yet — the workbook is not due until 6 September and writing the specification first is the entire method — but four days is not long and this specification is more demanding to build than most. |
-| Audit note | 0 / 12.5 | Correctly a stub, and the stub names the right three questions. Written after the build, which has not happened. |
-| **Spec-side subtotal** | **48 / 62.5** | the part that can be earned before a workbook exists |
+| Criterion | Where it stands |
+|---|---|
+| Spec completeness — inputs, structure, calculation flow | Stronger, and both changes were the ones that mattered. The labor function is now the case's form — q x base x (1 + rate)^q — rather than the geometric series, and the inputs are stored as the ratios they come from rather than their rounded displays: FARMER_RATE as 50000/1440, TEMP_RATE as 25000/1440, carrots as 5/6. The Values as printed rule that would have built the rounding error in is gone. What is still open is that the specification does not tell a reader its profit figure is not comparable with the published $42,762, or why — and that is the single most important thing someone picking this document up needs to know. |
+| Spec validation rules | Stronger. The published figures are now acceptance tests, and you chose the anchor point intelligently — LABOR_HRS_TOM(10) at 2,334.37, MARGINAL_LABOR_HRS_TOM(10) at 424.43, and MC_TOM(10) at $8,248.59. That last one is the clever part: at bed 10 the farmer's hours are long exhausted, so your temp-rate-only convention and the course's blended convention agree exactly there, which lets you verify against the published number without abandoning your own model. The price-taker test and the constraint-attribution rule remain the two best-conceived validation rules in the cohort. What is still open is that most rules are pass/fail with no tolerance, and rule 8's sub-checks test equality after rounding to two decimals, which is a tolerance of zero by another name. |
+| Workbook satisfies the contract | A real, ambitious build. Five sheets, fifty-one named ranges, the full N_TEMP hiring sweep across five scenarios with a MATCH-driven winner, per-crop binding-constraint attribution, and a profit and loss statement computed independently from cash outlays that reconciles back to the optimizer. Your marginal-hours formula is the exact closed form of the difference — base x (1+d)^(q-1) x (1 + qd) — which is the correct algebra and which nobody else derived. Two things cost marks. The committed file was written by openpyxl and never opened in Excel, so every check cell and every computed figure is blank until someone recalculates it — I had to evaluate your own model by hand to find out what it says. And the decision cells are hand-entered integers with no Solver setup anywhere in the workbook, so the search that produced them is not reproducible from the file. |
+| Audit note | Two findings and both are real. The first is a critique of your own specification — that validation rule 4, the price-taker test, is mis-specified for a crop that stops on a labor step rather than on price. Auditing your own rule and reporting it as defective is rarer and harder than auditing a number. The second, that a dollars-per-hour greedy heuristic does not find the true optimum and exhaustive search is required, is a genuine result about the problem rather than about your spreadsheet. What is still open is that neither finding records what you did about it, which is the fourth question your own template asks. |
 
-> Spec-side 48 of 62.5. Held rather than entered: with no workbook, a mark out of 100 would describe a submission you have not made yet.
+### What your model actually says, since the file will not tell you
 
-### The temp-hiring argument, which nobody else in the cohort saw
+Because the workbook carries no calculated values, I evaluated your five scenarios by hand from your own formulas. Your model recommends hiring three temporary workers and planting 10 tomato, 19 carrot and 28 mesclun beds, for a season profit of $16,586.
 
-"A temp is $25,000 for 1,440 hours, hired whole. Labor cash cost is therefore a step function, and within a step the cash cost of one more hour is zero while the cash cost of the hour that forces a new hire is $25,000. Pricing marginal labor at a smooth $17.36/hr is a modeling convenience that is correct for ranking beds and wrong for the hiring decision."
+The profit at each hiring level runs: no temps, a loss of $29,718; one temp, a loss of $3,640; two temps, $10,546; three temps, $16,586; four temps, $12,720. So the fourth worker destroys about $3,866 — your specification predicted the fourth temp would be value-destroying and gave a rough figure of $900, and the direction was right even though the magnitude was four times larger.
 
-That is the sharpest paragraph anyone has written in this stage, and it is not a detail — it is a real objection to how everyone else, including the course's own convention, is treating labor. Every other specification in the cohort divides $25,000 by 1,440, gets $17.36, and prices every marginal hour at it. You noticed that the actual cash outlay does not work that way, that N_TEMP is therefore a decision rather than an output, and that the model has to sweep it explicitly.
+At the recommendation you use 5,029 of the 5,040 hours three workers and the farmer provide. Eleven hours of slack. Your own rule 3 — slack must be less than one worker's hours, or a temp is being paid for nothing — passes comfortably.
 
-You also did the scoping check rather than asserting it: you report that the profit-maximizing N_TEMP is not 4, and that hiring the fourth temp costs about $900 and changes the bed mix. That is a finding worth having, and it exists because you took the lumpiness seriously.
+Open the file in Excel, let it calculate, and commit it again. Right now the most interesting result in your submission is invisible to anyone who opens it.
 
-### The two divergences, and why they matter before you build
+### Nicolina dilwith's model returns the same answer, to the dollar
 
-Your labor function is not the one the case uses, and this is the thing to settle first.
+Hers recommends 10 / 19 / 28 at $16,586 as well, built independently from a completely different specification and a different workbook.
 
-You specify MARGINAL_LABOR_HRS(q) = SEASON_HRS_PER_BED × (1 + DIM)^(q-1), with total hours as the geometric series SEASON_HRS_PER_BED × ((1+DIM)^q - 1) / DIM. The case's form applies the compounding to the whole crop at once: LABOR_HRS(q) = q × hrs-per-bed-week × 36 × (1 + DIM)^q. Those are different models. At ten tomato beds yours gives about 1,434 hours and the case's gives 2,334.37. Your reading is the more natural one in English — each bed needs a bit more than the last — and it is not unreasonable. But it will not reproduce the published check figures, and your own justification for the compounding reading (that tomatoes stop at 18 beds, matching your brief, and that total demand then overshoots supply by 16 hours) is an argument for the case's form, not for the series you specified.
+That is worth knowing because it is not a coincidence and it is not a problem. It follows from a modelling choice you both made: charging the farmer's full $50,000 and each temporary worker's full $25,000 as cash, in whole blocks, rather than charging only the hours actually used at a derived hourly rate. Under that convention 10 / 19 / 28 with three workers genuinely is the optimum. Two people reaching it independently is evidence that the convention determines the answer.
 
-The second is smaller and easier. Your Values as printed rule uses 0.833, $34.72 and $17.36 as given. Those three are rounded displays of 5/6, 50,000/1,440 and 25,000/1,440. Another workbook in this cohort used the rounded versions and came out $13.16 high on a $42,762 profit — its own check caught it and the fix was to store each as the ratio it comes from. Your rule as written builds that error in deliberately.
+The course's published figures use the other convention and give 10 / 20 / 30 at $42,761.66. Yours is the cash view; the course's is the economic view. Neither is wrong, and the gap between them is one of the questions this case exists to raise.
 
-Neither of these is a mark against your reasoning. Both are the kind of thing a specification exists to surface before a workbook is built on top of it, which is exactly what happened.
+### The argument you are making is a good one and it deserves to be made properly
 
-### What i would do with four days
+Your specification says pricing marginal labor at a smooth $17.36 an hour is a convenience that is right for ranking beds and wrong for the hiring decision, because a temp is hired whole: the hour that forces a new hire costs $25,000 and every hour after it is free until the next one.
 
-- Settle the labor function. Either adopt the case's form and note in the spec that you considered the series reading and why you set it aside, or keep yours and say plainly that your model will not reproduce the published figures and why you believe your reading is right. Both are defensible; leaving it ambiguous is not, because the workbook cannot be built until it is decided.
+That is correct, it is the sharpest economic observation anyone has made in this stage, and your model is the only one that acts on it. But right now a reader has to reconstruct all of that to understand why your profit is $16,586 and everyone else's is $42,762 — and most readers will conclude your model is broken.
 
-- Add the check figures as acceptance tests with tolerances. Optimal mix 10 / 20 / 30, season profit $42,762 within $5, standalone crossings 10 / 10 / 6, and a hand-checked labor anchor. Your rule 6 already asks for a hand calculation at three bed counts; give it a tolerance so it can pass.
+So add one short section to the specification, near the top, that says: this model prices labor as cash actually spent in whole hiring blocks; the published check figures use hours consumed at derived rates; the two agree at the margin, which is why the bed-10 anchors reconcile exactly, and diverge on totals by the amount of unused paid capacity. Then your headline number stops looking like an error and starts looking like a position.
 
-- Then build. Your specification is detailed enough that the build should be mechanical, which is what a good specification is for.
+### What I would do with the time left
 
-### One thing about your repository, separate from this grade
+- Round-trip the workbook through Excel and commit it. Every other point below is smaller than this one, because until you do it nobody can see what you built.
 
-Most of your root files are one byte — AGENTS.md, CLAUDE.md, prompt-log.md, and every directory README. Your BIO.md and RESUME.md are real and substantial, so the content exists; the scaffold around it is empty. That is what is holding your Stage 0 at the 80 floor rather than where the rest of your work sits, and it is perhaps an hour of writing.
+- Add the convention note described above.
 
-prompt-log.md is the one I would do first, because it is the only one that cannot be reconstructed later. It is meant to hold the sessions as they happen, and Stage 1.3 asks you to draw on it.
+- Record what you did about each audit finding — your own template asks for it and both findings currently stop at what you found.
+
+- If there is time, put the search in the workbook: an exhaustive integer sweep on a sheet, or a Solver setup per N_TEMP column. Your second audit finding says exhaustive search is required, and showing it is what turns that claim into evidence.
 
 ---
 
@@ -56,10 +55,10 @@ prompt-log.md is the one I would do first, because it is the only one that canno
 Treat this PR the way an analyst treats feedback from a senior reviewer — a review is a proposal to engage with, not a checklist to rubber-stamp.
 
 1. **Read it yourself first.** Form your own view before you change anything. Disagreeing *with a documented reason* is a legitimate, senior response.
-2. **Stress-test it with an LLM.** Paste this review and your spec into your assistant and ask it to (a) explain anything you are unsure of, and (b) argue the *other side* — where might the reviewer be wrong, and what would you give up by making each change.
-3. **Then correct the spec, not the workbook.** This is the rule that makes the stage work: when a check fails, you fix the specification and regenerate, so the document keeps describing what was actually built.
+2. **Stress-test it with an LLM.** Paste this review and your spec into your assistant and ask it to (a) explain anything you are unsure of, and (b) argue the *other side*.
+3. **Then correct the spec, not the workbook.** When a check fails, you fix the specification and regenerate, so the document keeps describing what was actually built.
 4. **Close the loop.** Reply in this thread with what you changed and what you pushed back on, then commit and push.
 
-*Nothing here is final. Stage 1.2 is not due until 6 September, and the stage is re-graded from scratch at the deadline.*
+*Your score and the per-criterion breakdown are in your Lamaku comment, not here — this repository is public.*
 
 — Adam
