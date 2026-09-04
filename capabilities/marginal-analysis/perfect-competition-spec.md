@@ -2,9 +2,9 @@
 type: spec
 capability: marginal-analysis
 engagement: perfect-competition
-date: 2026-08-23
-status: draft            # draft | built | audited
-built_with: ""           # fill in when the model is actually built
+date: 2026-09-03
+status: built            # draft | built | audited
+built_with: "Claude Opus 5, openpyxl, from this file — recalculated and error-checked with the Python `formulas` engine (LibreOffice was unavailable in this environment; Excel automation was blocked by macOS permissions and not pursued)"
 source: "Shidler README.md — 'the scenario — all assumptions in one place'; case-perfect-competition-stage2.html"
 ---
 
@@ -74,7 +74,8 @@ All values from the case scenario table. Nothing here is inferred.
 | `FIXED_COSTS` | 20000 | USD per season | Case scenario, header line |
 | `TOTAL_BEDS` | 64 | beds (16 beds x 4 plots) | Case scenario, header line |
 | `FARMER_SALARY` | 50000 | USD per season | Case scenario, header line |
-| `FARMER_FIELD_HRS` | 720 | hours per season | Case scenario, header line |
+| `FARMER_FIELD_HRS` | 720 | hours per season | Case scenario, header line — her actual field-time contribution to `LABOR_SUPPLY` |
+| `FARMER_FULL_HRS` | 1440 | hours per season | Case scenario, header line (implied) — see note below |
 | `TEMP_MAX` | 4 | workers | Case scenario, header line |
 | `TEMP_COST` | 25000 | USD per worker per season | Case scenario, header line |
 | `TEMP_HRS` | 1440 | hours per worker per season | Case scenario, header line |
@@ -82,6 +83,15 @@ All values from the case scenario table. Nothing here is inferred.
 `FARMER_RATE` and `TEMP_RATE` are not entered here. They are computed rates — see
 Calculation logic — and are never typed in as the rounded $34.72 / $17.36 the case
 displays. See Conventions, "Rates are ratios, not decimals."
+
+The case states the farmer is "$50,000 a season, half her time in the field — 720 field
+hours at an implied $34.72/hr." Those two numbers do not divide into each other:
+`50000/720 = 69.44`, not `34.72`. `50000/1440 = 34.72` — the case's own figure is built
+on a full-season-equivalent basis of 1,440 hours (the same figure a temp works), not on
+her 720 actual field hours. `FARMER_FULL_HRS` exists to hold that distinct 1,440-hour
+basis so `FARMER_RATE` can be computed correctly; `LABOR_SUPPLY` continues to use
+`FARMER_FIELD_HRS` (720), which is correct and unaffected — this correction touches only
+the reference rate, discovered building the model and never charged against a bed.
 
 ### Per crop
 | Name | Tomatoes | Carrots | Mesclun | Unit | Source |
@@ -114,7 +124,7 @@ In named-range notation. `c` ranges over the three crops; `q` is a bed index.
 
 Computed rates — formulas, never re-typed as their rounded decimals:
 
-    FARMER_RATE = FARMER_SALARY / FARMER_FIELD_HRS   ( = 50000/1440, not 34.72 )
+    FARMER_RATE = FARMER_SALARY / FARMER_FULL_HRS    ( = 50000/1440, not the rounded 34.72 )
     TEMP_RATE   = TEMP_COST / TEMP_HRS               ( = 25000/1440, not 17.36 )
 
 Season hours for a single bed of crop c, before diminishing returns:
@@ -194,7 +204,9 @@ such.
 
 **Rates are ratios, not decimals.** Every figure the case displays as a rounded decimal
 is entered as the ratio it comes from, computed by formula: `HRS_WK_BED_CAR = 5/6`
-(never `0.833`), `FARMER_RATE = FARMER_SALARY / FARMER_FIELD_HRS` (never `34.72`),
+(never `0.833`), `FARMER_RATE = FARMER_SALARY / FARMER_FULL_HRS` (never `34.72`, and never
+divided by `FARMER_FIELD_HRS` either — that gives $69.44, a genuine error caught building
+the model; see Audit findings),
 `TEMP_RATE = TEMP_COST / TEMP_HRS` (never `17.36`). A rounded literal entered instead of
 the ratio is a bug, not a simplification — a sibling workbook in this cohort stored the
 rounded rates directly and came out $13.16 high on a $42,762 profit; its own check row
@@ -254,3 +266,52 @@ case's own numbers — see Conventions.
 ## Audit findings
 Added AFTER the build. For each check: what you checked, what you found, what you did
 about it.
+
+**1. `FARMER_RATE = FARMER_SALARY / FARMER_FIELD_HRS` is wrong — a real bug this spec
+itself introduced.** Checked: built the formula literally as this spec's Calculation
+logic section originally specified and compared the result to the case's displayed
+$34.72/hr. Found: `50000/720 = 69.44`, not `34.72` — the formula and its own inline
+annotation `(= 50000/1440, not 34.72)` contradicted each other, because `FARMER_FIELD_HRS`
+is 720, not 1440. The case's $34.72 figure is built on a full-season-equivalent basis of
+1,440 hours (matching a temp's season), a distinct concept from the 720 hours she actually
+works in the field. What I did: added `FARMER_FULL_HRS = 1440` as its own named input,
+repointed `FARMER_RATE` at it, and left `LABOR_SUPPLY` on `FARMER_FIELD_HRS` (720)
+unchanged, since that one was always right. `FARMER_RATE` is never used in `MC_c(q)` or
+any other formula that reaches `PROFIT`, so this error, while real, never touched the
+optimization or its answer — verified by re-running the full calculation before and after
+the fix and confirming every other cell was unchanged.
+
+**2. Validation rule 4 (price-taker test) fails for Carrots and Mesclun, exactly as
+predicted when the rule was written.** Checked: ran the literal rule against the
+recommended scenario (N_TEMP=3, 10/19/28 beds). Found: PASS for Tomatoes, FAIL for
+Carrots and Mesclun — both stop short of their own `MC=PRICE` point (Carrot bed 20 is
+still individually profitable at MC≈$1,689 vs. PRICE $2,094) because only 10.25 labor
+hours of slack remain and neither crop's next bed fits in it. This is not a solving error;
+it is the rule's premise being satisfied (`LABOR_SLACK > 0`) without being sufficient. What
+I did: built the check exactly as specified so the failure is visible on the Checks sheet
+rather than hidden, and recommend revising the rule to also require
+`MARGINAL_LABOR_HRS_c(Q_c+1) <= LABOR_SLACK` before testing `PRICE_c <= MC_c(Q_c+1)`.
+
+**3. A $/hour greedy ranking does not find the true optimum — do not use it as a shortcut.**
+Checked: whether ranking every candidate bed (all three crops) by contribution per labor
+hour and taking greedily until the budget runs out reproduces the optimum found by
+exhaustive integer search. Found: it does not, at any `N_TEMP`. At `N_TEMP=3` greedy lands
+on 9/20/30 beds for $13,960; exhaustive search finds 10/19/28 for $16,586 — nearly $2,600
+better, using *more* labor hours, not fewer. Greedy over-commits to mesclun (whose 1.25%
+diminishing-returns rate makes early beds look artificially cheap) and never reconsiders.
+What I did: solved by exhaustive integer search (21×21×31 combinations × 5 `N_TEMP` values,
+68,355 evaluations) and entered those quantities as the Optimize sheet's decision cells,
+documented as reproducible via Excel Solver (Evolutionary engine — GRG Nonlinear should not
+be trusted on this non-convex labor formula either).
+
+**4. Build and verification tooling — a deviation worth recording.** The xlsx build
+standard calls for `recalc.py` (LibreOffice) to check for zero formula errors before
+shipping. Neither LibreOffice nor a working, permitted path to Excel automation was
+available in this environment (Excel is installed but macOS Automation permission for it
+was denied, and it was not pursued further since granting it is a system-security change).
+Substituted the Python `formulas` package as an independent calculation engine: it
+evaluated all 768 formula cells with zero error values, and every cell checked by hand —
+the tomato bed-10 check figures, all five `N_TEMP` profit figures, the recommended mix,
+and the full P&L reconciliation — matched the exhaustive-search ground truth exactly. This
+is not the mandated tool, so treat it as a strong but not final check; opening the file in
+Excel (which recalculates automatically) is worth a glance before this is treated as final.
