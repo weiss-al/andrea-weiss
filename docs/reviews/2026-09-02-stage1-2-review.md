@@ -22,11 +22,11 @@ At the recommendation you use 5,029 of the 5,040 hours three workers and the far
 
 Open the file in Excel, let it calculate, and commit it again. Right now the most interesting result in your submission is invisible to anyone who opens it.
 
-### Nicolina dilwith's model returns the same answer, to the dollar
+### Another model in this cohort returns your answer, to the dollar
 
-Hers recommends 10 / 19 / 28 at $16,586 as well, built independently from a completely different specification and a different workbook.
+A second model in this cohort recommends 10 / 19 / 28 at $16,586 as well, built independently from a completely different specification and a different workbook.
 
-That is worth knowing because it is not a coincidence and it is not a problem. It follows from a modelling choice you both made: charging the farmer's full $50,000 and each temporary worker's full $25,000 as cash, in whole blocks, rather than charging only the hours actually used at a derived hourly rate. Under that convention 10 / 19 / 28 with three workers genuinely is the optimum. Two people reaching it independently is evidence that the convention determines the answer.
+That is worth knowing because it is not a coincidence and it is not a problem. It follows from a modelling choice the two share: charging the farmer's full $50,000 and each temporary worker's full $25,000 as cash, in whole blocks, rather than charging only the hours actually used at a derived hourly rate. Under that convention 10 / 19 / 28 with three workers genuinely is the optimum. Two models reaching it independently is evidence that the convention determines the answer.
 
 The course's published figures use the other convention and give 10 / 20 / 30 at $42,761.66. Yours is the cash view; the course's is the economic view. Neither is wrong, and the gap between them is one of the questions this case exists to raise.
 
