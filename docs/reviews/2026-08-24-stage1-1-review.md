@@ -32,7 +32,7 @@ It matters because your Stage 1.2 specification is unusually careful about labor
 
 You built the workbook. It went from a one-byte placeholder to a real five-sheet model with a hiring sweep, a profit and loss statement that reconciles independently, and per-crop binding-constraint attribution. You also adopted the case's labor function and dropped the rounded inputs, which were the two things the last review asked for.
 
-Read that review — it carries considerably more weight than this stage, it is due 11 September, and there is a specific and interesting disagreement in it about how temporary labor should be costed where I think your position is defensible and worth arguing.
+Read that review — it carries considerably more weight than this stage, and there is a specific and interesting disagreement in it about how temporary labor should be costed where I think your position is defensible and worth arguing.
 
 ---
 
