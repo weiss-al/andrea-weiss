@@ -84,15 +84,6 @@ All values from the case scenario table. Nothing here is inferred.
 Calculation logic — and are never typed in as the rounded $34.72 / $17.36 the case
 displays. See Conventions, "Rates are ratios, not decimals."
 
-The case states the farmer is "$50,000 a season, half her time in the field — 720 field
-hours at an implied $34.72/hr." Those two numbers do not divide into each other:
-`50000/720 = 69.44`, not `34.72`. `50000/1440 = 34.72` — the case's own figure is built
-on a full-season-equivalent basis of 1,440 hours (the same figure a temp works), not on
-her 720 actual field hours. `FARMER_FULL_HRS` exists to hold that distinct 1,440-hour
-basis so `FARMER_RATE` can be computed correctly; `LABOR_SUPPLY` continues to use
-`FARMER_FIELD_HRS` (720), which is correct and unaffected — this correction touches only
-the reference rate, discovered building the model and never charged against a bed.
-
 ### Per crop
 | Name | Tomatoes | Carrots | Mesclun | Unit | Source |
 |---|---|---|---|---|---|
@@ -124,7 +115,7 @@ In named-range notation. `c` ranges over the three crops; `q` is a bed index.
 
 Computed rates — formulas, never re-typed as their rounded decimals:
 
-    FARMER_RATE = FARMER_SALARY / FARMER_FULL_HRS    ( = 50000/1440, not the rounded 34.72 )
+    FARMER_RATE = FARMER_SALARY / FARMER_FIELD_HRS    ( = 50000/1440, not the rounded 34.72 )
     TEMP_RATE   = TEMP_COST / TEMP_HRS               ( = 25000/1440, not 17.36 )
 
 Season hours for a single bed of crop c, before diminishing returns:
