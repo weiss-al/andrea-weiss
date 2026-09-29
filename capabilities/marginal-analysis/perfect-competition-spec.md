@@ -4,7 +4,7 @@ capability: marginal-analysis
 engagement: perfect-competition
 date: 2026-09-03
 status: built            # draft | built | audited
-built_with: "Claude Opus 5, openpyxl, from this file — recalculated and error-checked with the Python `formulas` engine (LibreOffice was unavailable in this environment; Excel automation was blocked by macOS permissions and not pursued)"
+built_with: "Claude Sonnet 5, openpyxl, from this file — recalculated and error-checked with the Python `formulas` engine (LibreOffice was unavailable in this environment; Excel automation was blocked by macOS permissions and not pursued); cached formula values injected directly and fullCalcOnLoad set so the file shows correct numbers whether or not the opener recalculates — see Audit finding 5"
 source: "Shidler README.md — 'the scenario — all assumptions in one place'; case-perfect-competition-stage2.html"
 ---
 
@@ -16,6 +16,29 @@ temporary workers to hire, to maximize season profit. The farm is a price taker:
 per-bed revenue is fixed and outside its control, so the only lever is quantity, and
 the only thing that makes quantity interesting is that labor hours per bed rise as
 each crop is scaled up.
+
+**A note on labor-cost convention, before anything else.** This model prices labor as
+cash actually spent, in whole hiring blocks: `LABOR_CASH_COST(N_TEMP) = FARMER_SALARY +
+N_TEMP x TEMP_COST`, a step function of workers hired, matching the case's own terms — a
+temp is "$25,000 each," not a divisible hourly wage. A published solution to this case
+gives $42,761.66, on a mix of 10 tomato / 20 carrot / 30 mesclun beds; this model's
+answer is $16,586, on 10 / 19 / 28 (see Outputs). Both are correct — they answer
+different questions about how labor is purchased, not the same question with different
+arithmetic. Verified directly: at 10/20/30 beds, priced with every hour beyond the
+farmer's sunk 720 charged individually at `TEMP_RATE` (no per-worker floor) up to the
+6,480-hour ceiling four workers' worth of capacity implies, profit is $42,761.66 to the
+penny — that is the published figure, exactly, under continuous hourly costing. The two
+conventions agree precisely at the level of a single bed's marginal cost (`MC_TOM(10) ≈
+$8,248.59` either way, since a marginal hour is always priced at `TEMP_RATE` in both) and
+diverge only in the total, because this model's convention pays for hiring capacity
+whether or not the season uses all of it: reaching 10/20/30 needs about 4,557 temp-hours
+beyond the farmer's, and this model can only buy that in 1,440-hour blocks at $25,000
+each — three blocks (4,320 hours) fall short, a fourth ($100,000 total) costs more than
+the extra beds are worth, so this model instead finds the best mix reachable within
+lumpy blocks (10/19/28 at three temps) rather than the best mix reachable at any price
+per hour. Neither number is the "real" answer to a case with unpriced ambiguity; each is
+the right answer to a stated assumption about how the farm hires. See Conventions,
+"Labor costing," for which assumption this spec adopts and why.
 
 ## Objective function
 Maximize
@@ -84,6 +107,15 @@ All values from the case scenario table. Nothing here is inferred.
 Calculation logic — and are never typed in as the rounded $34.72 / $17.36 the case
 displays. See Conventions, "Rates are ratios, not decimals."
 
+The case states the farmer is "$50,000 a season, half her time in the field — 720 field
+hours at an implied $34.72/hr." Those two numbers do not divide into each other:
+`50000/720 = 69.44`, not `34.72`. `50000/1440 = 34.72` — the case's own figure is built
+on a full-season-equivalent basis of 1,440 hours (the same figure a temp works), not on
+her 720 actual field hours. `FARMER_FULL_HRS` exists to hold that distinct 1,440-hour
+basis so `FARMER_RATE` can be computed correctly; `LABOR_SUPPLY` continues to use
+`FARMER_FIELD_HRS` (720), which is correct and unaffected — this correction touches only
+the reference rate, discovered building the model and never charged against a bed.
+
 ### Per crop
 | Name | Tomatoes | Carrots | Mesclun | Unit | Source |
 |---|---|---|---|---|---|
@@ -109,6 +141,7 @@ derived or truncated-looking figure in this contract, not only this one.
 | `Optimize` | Decision variables, constraints, objective. The cell Solver drives. |
 | `P&L` | Cash profit and loss at the chosen mix. Reconciles to `Optimize`. |
 | `Checks` | Every validation rule below, one row each, pass/fail. |
+| `Sweep` | Exhaustive verification of `Optimize`'s decision cells: every (`Q_TOM`, `Q_CAR`, `N_TEMP`) combination, with `Q_MES` solved in closed form rather than looped (every mesclun bed is individually profitable, so the best `Q_MES` for a fixed pair is always the most that fits) — mathematically equivalent to the full 68,355-combination search, not a sample of it. |
 
 ## Calculation logic
 In named-range notation. `c` ranges over the three crops; `q` is a bed index.
@@ -300,9 +333,31 @@ standard calls for `recalc.py` (LibreOffice) to check for zero formula errors be
 shipping. Neither LibreOffice nor a working, permitted path to Excel automation was
 available in this environment (Excel is installed but macOS Automation permission for it
 was denied, and it was not pursued further since granting it is a system-security change).
-Substituted the Python `formulas` package as an independent calculation engine: it
-evaluated all 768 formula cells with zero error values, and every cell checked by hand —
-the tomato bed-10 check figures, all five `N_TEMP` profit figures, the recommended mix,
-and the full P&L reconciliation — matched the exhaustive-search ground truth exactly. This
-is not the mandated tool, so treat it as a strong but not final check; opening the file in
-Excel (which recalculates automatically) is worth a glance before this is treated as final.
+Substituted the Python `formulas` package as an independent calculation engine: across the
+whole workbook (18,482 cells once the `Sweep` sheet was added — see finding 5) it evaluated
+zero error values, and every cell checked by hand — the tomato bed-10 check figures, all
+five `N_TEMP` profit figures, the recommended mix, and the full P&L reconciliation —
+matched the exhaustive-search ground truth exactly. This is not the mandated tool, so treat
+it as a strong but not final check; opening the file in Excel (which recalculates
+automatically) is worth a glance before this is treated as final.
+
+**5. Two gaps a reviewer caught: the search wasn't reproducible, and the file had no
+cached values to show for it.** Checked: whether a reader could verify the Optimize sheet's
+decision cells without re-running my own scratch code, and whether the file showed correct
+numbers to a viewer that doesn't recalculate. Found: no on both — the exhaustive search
+lived only in a Python script never committed, and openpyxl writes formulas with an empty
+`<v/>` placeholder, so a non-recalculating viewer sees blank cells even though Excel itself
+recalculates on open. What I did: added a `Sweep` sheet (see Structure) that re-derives the
+same 5 optima with genuine spreadsheet formulas — `Q_TOM`/`Q_CAR` looped exhaustively,
+`Q_MES` solved in closed form rather than looped (every mesclun bed is individually
+profitable, so the best `Q_MES` for a fixed pair is always the most that fits; verified
+this reduction against the full triple-loop search before trusting it — identical answer
+at all 5 `N_TEMP` values) — and a new Checks row (13) that proves, in-workbook, that
+`Optimize`'s hardcoded cells equal `Sweep`'s independently-derived optimum. Separately, set
+`fullCalcOnLoad` so any opener recalculates regardless, and — since I had the `formulas`
+engine's values in hand anyway — wrote them directly into each formula cell's `<v>` element
+by regex, touching only that element and nothing else (verified: every other byte of the
+file, comments and drawings included, is identical to the pre-patch version; all 18,388
+non-blank injected values were checked against the source computation with zero
+misattributions). Belt and suspenders: the file now shows correct numbers whether or not
+the opener recalculates.
