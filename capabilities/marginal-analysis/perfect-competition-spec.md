@@ -115,7 +115,7 @@ In named-range notation. `c` ranges over the three crops; `q` is a bed index.
 
 Computed rates — formulas, never re-typed as their rounded decimals:
 
-    FARMER_RATE = FARMER_SALARY / FARMER_FIELD_HRS    ( = 50000/1440, not the rounded 34.72 )
+    FARMER_RATE = FARMER_SALARY / FARMER_FULL_HRS    ( = 50000/1440, not the rounded 34.72 )
     TEMP_RATE   = TEMP_COST / TEMP_HRS               ( = 25000/1440, not 17.36 )
 
 Season hours for a single bed of crop c, before diminishing returns:
