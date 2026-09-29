@@ -1,6 +1,6 @@
 ---
 type: brief
-engagement: research-paper
+assignment: research-paper
 date: 2026-09-28   
 ---
 
