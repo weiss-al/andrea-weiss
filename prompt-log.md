@@ -54,3 +54,8 @@ Prompt: Asked for a prompt log summarizing the interaction above.
 Per AGENTS.md ("never invent a path or filename... ask me before you write it"), flagged that the request (promptlog.md) didn't match the existing empty prompt-log.md at the repo root, and asked where it should go before writing anything.
 User chose to fill in the existing root prompt-log.md. This entry is the result.
 
+
+2026-09-28 — capabilities/economic-research (research paper repo scaffold)
+Asked: Build out the GitHub structure the Individual Research Paper page requires.
+
+Read the assignment page and the portfolio repo standard, then checked the existing repo. Added capabilities/economic-research/ (README with the "exercised in:" line, spec.md as an empty template with frontmatter and the standard sections), drafts/, figures/, and scratch/ (added to .gitignore). Added an Engagements index to the root README. Did not touch docs/briefs/research-brief.md, and wrote no content for the spec or paper; those stay mine.

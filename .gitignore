@@ -17,3 +17,6 @@ Thumbs.db
 *.pem
 secrets/
 private/
+
+# Throwaway work only (abandoned outlines, half-cleaned data pulls)
+scratch/
