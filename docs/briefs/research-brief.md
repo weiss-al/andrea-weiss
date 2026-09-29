@@ -4,7 +4,7 @@ engagement: research-paper
 date: 2026-09-28   
 ---
 
-# <Engagement> — Assessment of Factors Underpinning Successful Pay-What-You-Want Businesses
+# Assessment of Factors Underpinning Successful Pay-What-You-Want Businesses
 
 ## The topic
 I want to evaluate the various factors of a business model that make a pay-what-you-want (PWYW) model successful. The PWYW model inherently goes against fundamental economic concepts that presume that a consumer will always pay the lowest possible cost for a good. In the PWYW structure, there are social factors prompting people to pay when the supplier is not requiring it. I want to evaluate what products/services are most conducive to this model and what factors of a business (location, community, mission, etc) make the model successful.
