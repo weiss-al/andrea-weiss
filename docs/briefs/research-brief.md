@@ -21,7 +21,7 @@ I expect that PWYW will be most feasible for goods/services that are typically m
 Analysis of existing literature on PWYW models and the factors that underpin the business model. I expect that existing research will incorporate both successful and unsuccessful PWYW businesses.
 
 ## Model
-Build a model to assess the feasibility of a PWYW model based on a businesses fixed costs, marginal costs for the product/service, marginal utility of the product for the buyer, and the obligation a buyer feels to pay based on community size/mission/other factors determined from the initial analysis.
+Build a model to assess the feasibility of a PWYW model based on a businesses fixed costs, marginal costs for the product/service, marginal utility of the product for the buyer, and the obligation a buyer feels to pay based on community size/mission/other factors determined from the initial analysis. 
 
 ## How I would know I was wrong
 If the PWYW model held for a broader range of goods/services or in larger communities, it would indicate there are additional factors to consider on why someone would pay when they do not have to.
