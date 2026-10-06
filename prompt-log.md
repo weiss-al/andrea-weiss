@@ -59,3 +59,15 @@ User chose to fill in the existing root prompt-log.md. This entry is the result.
 Asked: Build out the GitHub structure the Individual Research Paper page requires.
 
 Read the assignment page and the portfolio repo standard, then checked the existing repo. Added capabilities/economic-research/ (README with the "exercised in:" line, spec.md as an empty template with frontmatter and the standard sections), drafts/, figures/, and scratch/ (added to .gitignore). Added an Engagements index to the root README. Did not touch docs/briefs/research-brief.md, and wrote no content for the spec or paper; those stay mine.
+
+2026-10-05 — capabilities/economic-research (PWYW museum audio tour model)
+Asked: Build an Excel model from spec.md, similar in layout to a reference ROI workbook; then amend spec.md to match.
+
+Built model.xlsx (Model, Sensitivity, Engine, Lists tabs) and rewrote spec.md with the named input contract, formulas, conventions, and validation rules from my answers (free admission, all local audio-tour users move to PWYW, 3-month campaign, one-year device amortization, $5 or $10 gift shop spend as a break-even question).
+
+Caught by me: the first version showed $1,350 profit at $0 marketing and $0 gift shop spend. I pointed out that without marketing nobody knows PWYW exists. The model had applied the higher PWYW take-up regardless of awareness. Fixed by tying awareness to the marketing response curve; $0 marketing now gives exactly $0, and a check enforces it.
+
+Asked: Research PWYW for new customers, average paid versus recommended price, and other factors. Three research sub-agents returned reports; most key papers could not be read in full, so every figure is a lead to verify, not a citation. Evidence is thin on locals vs tourists, gift shop spillover, awareness, and cannibalization. Museum volume pilots were PWYW admission, not an audio tour added to free entry.
+
+Changes from the research: single payment ratio instead of a price curve, payment fade over the campaign, paired take-up/payment scenarios, wider sensitivity ranges. Finding: the gift shop is about 91% of the placeholder result, and the audio tour alone loses money; the result depends on new local visitors spending, which is unverified.
+Verification: recalculated with the Python formulas package (not opened in Excel); matched an independent Python calculation.
