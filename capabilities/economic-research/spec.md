@@ -13,7 +13,9 @@ source: "Individual Research Paper page (Kumu)"
 ## Purpose
 Determine whether a pay-what-you-want (PWYW) audio tour for local visitors to a museum would be profitable. The museum is free to enter. Tourists keep paying $7 for the audio tour; locals pay what they choose. A marketing campaign draws additional local visitors, and the model weighs the new revenue (audio tour payments and gift shop spend) against the revenue lost from existing locals who stop paying $7, the added costs, and the campaign spend.
 
-The model must answer: net profit over a 3-month campaign; the gift shop spend per new local visitor at which the program breaks even; and the average PWYW payment at which it breaks even.
+The model must answer, for a 90-day campaign: how many added local visitors per day PWYW needs to break even (the headline output), and how that requirement changes with marketing spend and gift shop spend. It also reports net profit, the gift shop spend at which the program breaks even, and the average PWYW payment at which it breaks even.
+
+The conclusion is drawn by comparing the required draw with what a campaign of that size could plausibly achieve, so the paper does not depend on a verified estimate of how many locals marketing attracts.
 
 ## Inputs — the named contract
 | Name | Value | Unit | Source |
@@ -39,6 +41,8 @@ The model must answer: net profit over a 3-month campaign; the gift shop spend p
 | `Device_Block_Size` | 25 | guests/day of capacity | Given |
 | `Device_Block_Cost` | 5000 | $ per block | Given |
 | `Device_Amort_Days` | 365 | days | Author (1-year amortization) |
+| `Card_Fee_Rate` | 2.8% | share of payment | Author. Credit card processing fee on local audio-tour payments |
+| `Card_Fee_Museum_Share` | 0% | share of the fee | Author. The fee is charged to the customer, so the museum bears none. Set above 0 to test otherwise |
 
 Derived inputs:
 
@@ -46,6 +50,7 @@ Derived inputs:
 - `Total_Daily_Locals = Total_Daily_Visitors × Percentage_Locals_Init`
 - `AudioLocal_Base = Total_Daily_Locals × Local_AudioTour_Rate_Init`
 - `AudioTourist_Base = Total_Daily_AudioTour − AudioLocal_Base`
+- `Fee_Keep = 1 − Card_Fee_Rate × Card_Fee_Museum_Share`
 - `Average_PWYW_Start = PWYW_Suggested_Price × PWYW_Payment_Ratio`
 - `Fade_Multiplier`: the campaign average of the fading payment as a share of day 1 (formula below)
 - `Average_PWYW = Average_PWYW_Start × Fade_Multiplier`
@@ -58,12 +63,16 @@ Items marked PLACEHOLDER are not backed by verified research. Results that depen
 Tabs in `model.xlsx`:
 
 - **Model:** inputs, derived inputs, a baseline vs. campaign daily view, campaign results, and checks.
-- **Sensitivity:** three tables of net profit over the campaign.
+- **Sensitivity:** tables 1–5 show net profit over the campaign; tables 6–7 show the break-even draw.
   1. Marketing spend × gift shop spend per new local.
   2. Campaign-average payment × local audio-tour take-up.
   3. Marketing spend × local traffic ceiling (the lowest ceiling equals the initial share: no draw).
   4. Local traffic ceiling × gift shop spend.
   5. Four paired take-up and payment scenarios, because take-up and payment move together (more people take it when it asks for less). The pairs are placeholders that illustrate the trade-off.
+  6. Break-even added locals per day, by marketing spend × gift shop spend.
+  7. The same break-even as a percentage rise in today's local visitors.
+
+  Tables 6 and 7 are closed-form and do not use the Engine. They are the main figure candidates.
 - **Engine:** one row per sensitivity scenario, so every table cell is traceable.
 - **Lists:** dropdown values.
 
@@ -84,9 +93,9 @@ Locals_Aware           = Locals_Campaign − Locals_Unaware       (includes all 
 AudioLocal_Campaign    = Locals_Unaware × Local_AudioTour_Rate_Init + Locals_Aware × Local_AudioTour_Rate_PWYW
 AudioTotal_Campaign    = AudioTourist_Base + AudioLocal_Campaign
 
-Audio_Revenue_Change   = Locals_Unaware × Local_AudioTour_Rate_Init × AudioTour_Price
+Audio_Revenue_Change   = Fee_Keep × ( Locals_Unaware × Local_AudioTour_Rate_Init × AudioTour_Price
                          + Locals_Aware × Local_AudioTour_Rate_PWYW × Average_PWYW
-                         − AudioLocal_Base × AudioTour_Price
+                         − AudioLocal_Base × AudioTour_Price )
 Headset_Cost_Change    = (AudioTotal_Campaign − Total_Daily_AudioTour) × Headset_Cost
 Device_Blocks          = MAX(0, ROUNDUP((AudioTotal_Campaign − Device_Capacity) / Device_Block_Size, 0))
 Device_Cost_Per_Day    = Device_Blocks × Device_Block_Cost / Device_Amort_Days
@@ -95,20 +104,34 @@ GiftShop_Change        = Added_Locals × GiftShop_Net_Spend_Local
 
 Daily_Contribution     = Audio_Revenue_Change − Headset_Cost_Change − Device_Cost_Per_Day + GiftShop_Change
 Net_Profit             = Daily_Contribution × Campaign_Days − Marketing_Spend
+
+Existing_Local_Effect  = Total_Daily_Locals × Awareness × ( Fee_Keep × (Local_AudioTour_Rate_PWYW × Average_PWYW
+                           − Local_AudioTour_Rate_Init × AudioTour_Price)
+                           − Headset_Cost × (Local_AudioTour_Rate_PWYW − Local_AudioTour_Rate_Init)
+                           + Local_AudioTour_Rate_PWYW × GiftShop_Spillover )
+Per_Added_Local        = Local_AudioTour_Rate_PWYW × (Fee_Keep × Average_PWYW − Headset_Cost) + GiftShop_Net_Spend_Local
+Breakeven_Added_Locals = (Marketing_Spend / Campaign_Days − Existing_Local_Effect) / Per_Added_Local
+                         (no break-even if Per_Added_Local ≤ 0)
+Required_Rise          = Breakeven_Added_Locals / Total_Daily_Locals
 Net_Profit_Audio_Only  = Net_Profit − GiftShop_Change × Campaign_Days
 ROI                    = Net_Profit / Marketing_Spend
 
 Breakeven_GiftShop     = GiftShop_Net_Spend_Local − Net_Profit / (Added_Locals × Campaign_Days)
-Breakeven_Average_PWYW = Average_PWYW − Net_Profit / (Locals_Aware × Local_AudioTour_Rate_PWYW × Campaign_Days)
+Breakeven_Average_PWYW = Average_PWYW − Net_Profit / (Locals_Aware × Local_AudioTour_Rate_PWYW × Fee_Keep × Campaign_Days)
 ```
 
 Concepts the model uses (author to confirm which the paper cites by name): marginal cost (the $1 headset); price discrimination between tourists and locals; cannibalization (existing locals moving from $7 to PWYW); diminishing returns to marketing; a lumpy capacity cost (device blocks); complementary spending in the gift shop; and the social obligation to pay that sets the average PWYW payment.
 
-Each sensitivity table is a figure candidate. The paper should cite the figure the argument uses, not all three.
+Each sensitivity table is a figure candidate. The paper should cite the figure the argument uses, not all of them.
 
 ## Conventions
 - Model basis is the average day of the campaign, multiplied by `Campaign_Days`. The lift in local visitors is held at `Percentage_Locals_Final` for every campaign day. No ramp-up or fade.
-- The model covers only the campaign period. Revenue after the campaign ends is ignored, which understates benefits if the lift persists.
+- The model covers only the 90-day campaign, by design, to test the program's utility in isolation. Anything after day 90 is ignored.
+- Locals are identified by a Hawaii ID. Checking IDs costs the museum nothing, and companions of locals do not get PWYW. No tourists get PWYW.
+- Locals do not come today because the museum does not appeal to them. Marketing alone, without PWYW, would draw no additional visitors. So all added locals are attributed to PWYW together with the locally targeted campaign, and no marketing-only comparison is modeled.
+- Locals may pay as little as $0. `Average_PWYW` is the mean over all aware local audio-tour users, including those who pay $0.
+- The card fee (2.8%) is charged to the customer, so it is not a museum cost unless `Card_Fee_Museum_Share` is raised. It applies to local audio-tour payments only. Tourist payments are unchanged.
+- Gift shop spend per local visitor is a sensitivity variable, not a point estimate. The model counts it for added locals only, because existing locals' purchases already occur. A separate `GiftShop_Spillover` (0 by default) covers any extra spend by existing locals.
 - `Percentage_Locals_Final` is the local share of all visitors. Tourist numbers do not change, so added locals are in addition to the 5,000 baseline.
 - Nothing changes without marketing. Locals who have not heard of PWYW (the share `1 − Awareness`) behave as they do today: `Local_AudioTour_Rate_Init` take the tour and pay $7. Locals who have heard of it, including every added local, take the tour at `Local_AudioTour_Rate_PWYW` and pay `Average_PWYW`. The lost $7 from aware existing locals is counted.
 - `Average_PWYW` is the mean over all aware local audio-tour users, including those who pay $0. Each of them still costs `Headset_Cost`. The Sensitivity table of average payment includes a $0 row.
@@ -130,6 +153,8 @@ Model:
 - Net profit at `Breakeven_GiftShop` is zero.
 - The Engine base scenario equals the Model tab's net profit, and the Engine's $0-marketing scenario equals $0.
 - `Fade_Multiplier` is above 0 and at most 100%.
+- Daily contribution equals the existing-local effect plus added locals × the per-local contribution, when no extra devices are needed.
+- Net profit at the break-even draw is zero (Engine test scenario), when no extra devices are needed.
 - No error cells. Every calculated cell contains a formula.
 - Hand check: at `Marketing_Spend` = 0, net profit is exactly $0 whatever the other inputs, because no local is aware of PWYW and no one is added.
 - Break-even identities: net profit is zero at `Breakeven_GiftShop` and at `Breakeven_Average_PWYW`.
@@ -141,7 +166,7 @@ Paper:
 - Every placeholder in the model is replaced by a verified, cited value, or the paper states that it is an assumption.
 
 ## Outputs
-Model outputs, by name: `Net_Profit`, `ROI`, `Breakeven_GiftShop`, `Breakeven_Average_PWYW`, `Net_Profit_Audio_Only`, the gift shop share of campaign contribution, and the five sensitivity tables.
+Model outputs, by name: `Breakeven_Added_Locals`, `Required_Rise`, the ratio of assumed to required draw, `Existing_Local_Effect`, `Net_Profit`, `ROI`, `Breakeven_GiftShop`, `Breakeven_Average_PWYW`, `Net_Profit_Audio_Only`, the gift shop share of campaign contribution, and the seven sensitivity tables.
 
 Files: `capabilities/economic-research/model.xlsx`; the finished paper at `analysis/research-paper.pdf`; figures in `figures/`; the closing reflection in `prompt-log.md`.
 
