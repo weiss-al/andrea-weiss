@@ -14,6 +14,7 @@ I want to evaluate the potential profitability of incorporating a Pay What You W
 - A given initial visitor count and percentage of local/tourist visitation
 - The effectiveness of a marketing campaign to share the new price structure with the local community.
 - The data on existing PWYW businesses can be replicated in other communities and businesses.
+- "locals" identified by a local Hawaii ID
 
 ## Hypothesis
 I expect that a Pay What You Want (PWYW) model will be a viable way to increase revenue in audio tours and in the museum overall. The PWYW structure could bring in traffic that otherwise would not attend at all, so any amount they choose to pay would be otherwise lost revenue. Additionally, when they do come to the museum and receive the potentially reduced rate audio tour (based on PWYW), they are then more likely to spend in the gift shop, which compounds the potential revenue gain.
