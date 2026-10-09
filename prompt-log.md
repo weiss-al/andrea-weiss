@@ -71,3 +71,10 @@ Asked: Research PWYW for new customers, average paid versus recommended price, a
 
 Changes from the research: single payment ratio instead of a price curve, payment fade over the campaign, paired take-up/payment scenarios, wider sensitivity ranges. Finding: the gift shop is about 91% of the placeholder result, and the audio tour alone loses money; the result depends on new local visitors spending, which is unverified.
 Verification: recalculated with the Python formulas package (not opened in Excel); matched an independent Python calculation.
+
+2026-10-08 — capabilities/economic-research (break-even draw and figures)
+Asked: Narrow the PWYW model so conclusions can be drawn; I answered the assumptions it needed (marketing alone draws no one, Hawaii ID with no companions, 90 days only, 2.8% card fee charged to the customer, $0 payment floor, gift shop spend applied to added locals).
+
+Built: a break-even draw output (added locals per day PWYW needs), a card fee input, and sensitivity tables 6-8, with native Excel charts for tables 7 and 8. Two paper figures with stdlib-only scripts and data tables: break-even-draw.svg and payment-sensitivity.svg. Spec updated to match.
+Verification: recalculated with the Python formulas package (not opened in Excel); the closed-form break-even matched an independent Python calculation, and figure values match workbook tables 7 and 8. Rendered both figures in the browser pane and fixed a legend/axis collision and a callout crossing another series.
+Finding at placeholder inputs: at $10,000 marketing and $5 gift shop spend, a 5.9% rise in local visitors is needed to break even; at $1 it is 21.2%. Break-even depends on gift shop spend and the average payment. Take-up, payment ratio and marketing response remain unverified placeholders.

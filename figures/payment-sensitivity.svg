@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="960" height="600" role="img" aria-labelledby="t d" font-family="Times New Roman, Times, serif">
+<title id="t">Rise in local visitors needed to break even, by average pay-what-you-want payment</title>
+<desc id="d">Line chart at a $5 gift shop spend per added local. The required rise in local visitors falls as the average payment rises, and reaches zero between about $6 and $7.50 depending on marketing spend.</desc>
+<rect width="960" height="600" fill="#ffffff"/>
+<text x="78" y="34" font-size="22" font-weight="bold" fill="#1a1a1a">Higher average payments sharply cut the local draw PWYW needs</text>
+<text x="78" y="58" font-size="15" fill="#52514e">Rise in today's local visitors needed to break even, by average PWYW payment, at a $5 gift shop spend per added local.</text>
+<text x="78" y="86" font-size="14" fill="#52514e">Marketing spend:</text>
+<line x1="206" y1="82" x2="232" y2="82" stroke="#77767a" stroke-width="2"/>
+<text x="238" y="86" font-size="14" fill="#52514e">$5,000</text>
+<line x1="314" y1="82" x2="340" y2="82" stroke="#2a78d6" stroke-width="3.5"/>
+<text x="346" y="86" font-size="14" fill="#52514e">$10,000</text>
+<line x1="431" y1="82" x2="457" y2="82" stroke="#77767a" stroke-width="2"/>
+<text x="463" y="86" font-size="14" fill="#52514e">$15,000</text>
+<line x1="548" y1="82" x2="574" y2="82" stroke="#77767a" stroke-width="2"/>
+<text x="580" y="86" font-size="14" fill="#52514e">$20,000</text>
+<line x1="78" y1="496.0" x2="920" y2="496.0" stroke="#52514e" stroke-width="1"/>
+<text x="68" y="501.0" font-size="14" text-anchor="end" fill="#52514e">0%</text>
+<line x1="78" y1="436.6" x2="920" y2="436.6" stroke="#dcdcd8" stroke-width="1"/>
+<text x="68" y="441.6" font-size="14" text-anchor="end" fill="#52514e">5%</text>
+<line x1="78" y1="377.2" x2="920" y2="377.2" stroke="#dcdcd8" stroke-width="1"/>
+<text x="68" y="382.2" font-size="14" text-anchor="end" fill="#52514e">10%</text>
+<line x1="78" y1="317.9" x2="920" y2="317.9" stroke="#dcdcd8" stroke-width="1"/>
+<text x="68" y="322.9" font-size="14" text-anchor="end" fill="#52514e">15%</text>
+<line x1="78" y1="258.5" x2="920" y2="258.5" stroke="#dcdcd8" stroke-width="1"/>
+<text x="68" y="263.5" font-size="14" text-anchor="end" fill="#52514e">20%</text>
+<line x1="78" y1="199.1" x2="920" y2="199.1" stroke="#dcdcd8" stroke-width="1"/>
+<text x="68" y="204.1" font-size="14" text-anchor="end" fill="#52514e">25%</text>
+<line x1="78" y1="139.7" x2="920" y2="139.7" stroke="#dcdcd8" stroke-width="1"/>
+<text x="68" y="144.7" font-size="14" text-anchor="end" fill="#52514e">30%</text>
+<text transform="translate(20,306.0) rotate(-90)" font-size="15" text-anchor="middle" fill="#52514e">Rise in local visitors needed</text>
+<line x1="78.0" y1="496" x2="78.0" y2="501" stroke="#52514e"/>
+<text x="78.0" y="518" font-size="14" text-anchor="middle" fill="#52514e">$0</text>
+<line x1="246.4" y1="496" x2="246.4" y2="501" stroke="#52514e"/>
+<text x="246.4" y="518" font-size="14" text-anchor="middle" fill="#52514e">$2</text>
+<line x1="414.8" y1="496" x2="414.8" y2="501" stroke="#52514e"/>
+<text x="414.8" y="518" font-size="14" text-anchor="middle" fill="#52514e">$4</text>
+<line x1="583.2" y1="496" x2="583.2" y2="501" stroke="#52514e"/>
+<text x="583.2" y="518" font-size="14" text-anchor="middle" fill="#52514e">$6</text>
+<line x1="751.6" y1="496" x2="751.6" y2="501" stroke="#52514e"/>
+<text x="751.6" y="518" font-size="14" text-anchor="middle" fill="#52514e">$8</text>
+<line x1="920.0" y1="496" x2="920.0" y2="501" stroke="#52514e"/>
+<text x="920.0" y="518" font-size="14" text-anchor="middle" fill="#52514e">$10</text>
+<text x="499.0" y="542" font-size="15" text-anchor="middle" fill="#52514e">Average payment per aware local audio-tour user (campaign average)</text>
+<line x1="393.5" y1="116" x2="393.5" y2="496" stroke="#52514e" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="385.5" y="132" font-size="14" text-anchor="end" fill="#1a1a1a">Model base payment $3.75 (placeholder)</text>
+<line x1="667.4" y1="116" x2="667.4" y2="496" stroke="#52514e" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="675.4" y="132" font-size="14" text-anchor="start" fill="#1a1a1a">Today's price $7</text>
+<polyline points="78.0,381.5 99.0,387.5 120.1,393.3 141.2,399.1 162.2,404.7 183.2,410.3 204.3,415.7 225.3,421.0 246.4,426.2 267.4,431.3 288.5,436.4 309.6,441.3 330.6,446.1 351.6,450.9 372.7,455.5 393.8,460.1 414.8,464.6 435.9,469.0 456.9,473.3 477.9,477.6 499.0,481.8 520.0,485.9 541.1,489.9 562.1,493.9 573.3,496.0" fill="none" stroke="#77767a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="573.3" cy="496.0" r="6" fill="#ffffff" stroke="#77767a" stroke-width="2.5"><title>$5,000 marketing: no added locals needed once the average payment reaches $5.88</title></circle>
+<text x="90.6" y="371.5" font-size="14" font-weight="normal" fill="#52514e">$5,000</text>
+<circle cx="78.0" cy="381.5" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$5,000 marketing, $0 average payment: 9.6% rise needed</title></circle>
+<circle cx="246.4" cy="426.2" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$5,000 marketing, $2 average payment: 5.9% rise needed</title></circle>
+<circle cx="414.8" cy="464.6" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$5,000 marketing, $4 average payment: 2.6% rise needed</title></circle>
+<polyline points="78.0,232.3 99.0,244.5 120.1,256.5 141.2,268.2 162.2,279.7 183.2,291.0 204.3,302.1 225.3,312.9 246.4,323.5 267.4,334.0 288.5,344.2 309.6,354.2 330.6,364.1 351.6,373.8 372.7,383.3 393.8,392.6 414.8,401.8 435.9,410.8 456.9,419.6 477.9,428.3 499.0,436.8 520.0,445.2 541.1,453.5 562.1,461.6 583.2,469.5 604.2,477.4 625.3,485.1 646.4,492.7 655.7,496.0" fill="none" stroke="#77767a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="655.7" cy="496.0" r="6" fill="#ffffff" stroke="#77767a" stroke-width="2.5"><title>$15,000 marketing: no added locals needed once the average payment reaches $6.86</title></circle>
+<text x="90.6" y="222.3" font-size="14" font-weight="normal" fill="#52514e">$15,000</text>
+<circle cx="78.0" cy="232.3" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$15,000 marketing, $0 average payment: 22.2% rise needed</title></circle>
+<circle cx="246.4" cy="323.5" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$15,000 marketing, $2 average payment: 14.5% rise needed</title></circle>
+<circle cx="414.8" cy="401.8" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$15,000 marketing, $4 average payment: 7.9% rise needed</title></circle>
+<circle cx="583.2" cy="469.5" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$15,000 marketing, $6 average payment: 2.2% rise needed</title></circle>
+<polyline points="78.0,178.3 99.0,192.1 120.1,205.7 141.2,219.0 162.2,232.0 183.2,244.8 204.3,257.4 225.3,269.6 246.4,281.7 267.4,293.5 288.5,305.1 309.6,316.5 330.6,327.7 351.6,338.6 372.7,349.4 393.8,360.0 414.8,370.3 435.9,380.5 456.9,390.6 477.9,400.4 499.0,410.1 520.0,419.6 541.1,428.9 562.1,438.1 583.2,447.2 604.2,456.1 625.3,464.8 646.4,473.4 667.4,481.9 688.5,490.2 703.3,496.0" fill="none" stroke="#77767a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="703.3" cy="496.0" r="6" fill="#ffffff" stroke="#77767a" stroke-width="2.5"><title>$20,000 marketing: no added locals needed once the average payment reaches $7.43</title></circle>
+<text x="90.6" y="168.3" font-size="14" font-weight="normal" fill="#52514e">$20,000</text>
+<circle cx="78.0" cy="178.3" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$20,000 marketing, $0 average payment: 26.8% rise needed</title></circle>
+<circle cx="246.4" cy="281.7" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$20,000 marketing, $2 average payment: 18.0% rise needed</title></circle>
+<circle cx="414.8" cy="370.3" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$20,000 marketing, $4 average payment: 10.6% rise needed</title></circle>
+<circle cx="583.2" cy="447.2" r="4" fill="#77767a" stroke="#ffffff" stroke-width="2"><title>$20,000 marketing, $6 average payment: 4.1% rise needed</title></circle>
+<polyline points="78.0,297.6 99.0,307.4 120.1,317.0 141.2,326.3 162.2,335.6 183.2,344.6 204.3,353.4 225.3,362.1 246.4,370.6 267.4,378.9 288.5,387.1 309.6,395.2 330.6,403.0 351.6,410.8 372.7,418.4 393.8,425.8 414.8,433.2 435.9,440.4 456.9,447.4 477.9,454.4 499.0,461.2 520.0,467.9 541.1,474.5 562.1,481.0 583.2,487.4 604.2,493.7 612.1,496.0" fill="none" stroke="#2a78d6" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="612.1" cy="496.0" r="6" fill="#ffffff" stroke="#2a78d6" stroke-width="2.5"><title>$10,000 marketing: no added locals needed once the average payment reaches $6.34</title></circle>
+<text x="90.6" y="287.6" font-size="14" font-weight="bold" fill="#2a78d6">$10,000</text>
+<circle cx="78.0" cy="297.6" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"><title>$10,000 marketing, $0 average payment: 16.7% rise needed</title></circle>
+<circle cx="246.4" cy="370.6" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"><title>$10,000 marketing, $2 average payment: 10.6% rise needed</title></circle>
+<circle cx="414.8" cy="433.2" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"><title>$10,000 marketing, $4 average payment: 5.3% rise needed</title></circle>
+<circle cx="583.2" cy="487.4" r="4" fill="#2a78d6" stroke="#ffffff" stroke-width="2"><title>$10,000 marketing, $6 average payment: 0.7% rise needed</title></circle>
+<text x="726.3" y="395.1" font-size="14" fill="#1a1a1a">Open circle: past this payment,</text>
+<text x="726.3" y="413.1" font-size="14" fill="#1a1a1a">PWYW pays for itself with no</text>
+<text x="726.3" y="431.1" font-size="14" fill="#1a1a1a">added locals at all.</text>
+<text x="78" y="564" font-size="12.5" fill="#52514e">Assumes 20% of aware locals take the tour, a $1 headset per user, no card fee to the museum, and a $5 net gift shop spend per added local only.</text>
+<text x="78" y="582" font-size="12.5" fill="#52514e">Take-up and marketing response are placeholder assumptions. Payments above $7 mean locals pay more than today's price. Source: author's model.</text>
+</svg>

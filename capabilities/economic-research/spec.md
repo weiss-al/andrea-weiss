@@ -63,7 +63,7 @@ Items marked PLACEHOLDER are not backed by verified research. Results that depen
 Tabs in `model.xlsx`:
 
 - **Model:** inputs, derived inputs, a baseline vs. campaign daily view, campaign results, and checks.
-- **Sensitivity:** tables 1–5 show net profit over the campaign; tables 6–7 show the break-even draw.
+- **Sensitivity:** tables 1–5 show net profit over the campaign; tables 6–8 show the break-even draw.
   1. Marketing spend × gift shop spend per new local.
   2. Campaign-average payment × local audio-tour take-up.
   3. Marketing spend × local traffic ceiling (the lowest ceiling equals the initial share: no draw).
@@ -71,8 +71,9 @@ Tabs in `model.xlsx`:
   5. Four paired take-up and payment scenarios, because take-up and payment move together (more people take it when it asks for less). The pairs are placeholders that illustrate the trade-off.
   6. Break-even added locals per day, by marketing spend × gift shop spend.
   7. The same break-even as a percentage rise in today's local visitors.
+  8. Break-even rise in local visitors by campaign-average payment ($0–$10) × marketing spend, at the base gift shop spend. Negative values mean the program pays for itself with no added locals.
 
-  Tables 6 and 7 are closed-form and do not use the Engine. They are the main figure candidates.
+  Tables 6–8 are closed-form and do not use the Engine. They are the main figure candidates.
 - **Engine:** one row per sensitivity scenario, so every table cell is traceable.
 - **Lists:** dropdown values.
 
@@ -166,9 +167,9 @@ Paper:
 - Every placeholder in the model is replaced by a verified, cited value, or the paper states that it is an assumption.
 
 ## Outputs
-Model outputs, by name: `Breakeven_Added_Locals`, `Required_Rise`, the ratio of assumed to required draw, `Existing_Local_Effect`, `Net_Profit`, `ROI`, `Breakeven_GiftShop`, `Breakeven_Average_PWYW`, `Net_Profit_Audio_Only`, the gift shop share of campaign contribution, and the seven sensitivity tables.
+Model outputs, by name: `Breakeven_Added_Locals`, `Required_Rise`, the ratio of assumed to required draw, `Existing_Local_Effect`, `Net_Profit`, `ROI`, `Breakeven_GiftShop`, `Breakeven_Average_PWYW`, `Net_Profit_Audio_Only`, the gift shop share of campaign contribution, and the eight sensitivity tables.
 
-Files: `capabilities/economic-research/model.xlsx`; the finished paper at `analysis/research-paper.pdf`; figures in `figures/`; the closing reflection in `prompt-log.md`.
+Files: `capabilities/economic-research/model.xlsx`; the finished paper at `analysis/research-paper.pdf`; figures in `figures/` (`break-even-draw.svg` and `payment-sensitivity.svg`, each with its data table and the script that reproduces it from the spec's formulas; equivalent charts sit beside tables 7 and 8 in `model.xlsx`); the closing reflection in `prompt-log.md`.
 
 ## Audit findings
 Added AFTER the paper is drafted. For each check: what you checked, what you found, what you did about it.
