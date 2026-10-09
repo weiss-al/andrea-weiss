@@ -23,6 +23,7 @@ Total_Daily_Locals  = Total_Daily_Visitors * (Percentage_Locals_Init)
 Average_PWYW | dollars | Variable
 Cost_Audio_Tour = 1 dollar for headphones, unless Total_Daily_AudioTour > 500 people, then have to factor in bulk purchase of new audio tour devices of $5000 per 25 guests
 Audio_Tour_Cost = 7 dollars
+Average_GiftShop = 5 dollars
 Marketing_Costs | Variable up to $20000
 
 Data sources, series, and studies the analysis will draw on. Each gets a name, a value or location, a unit, and a source.
